@@ -1,4 +1,4 @@
-package com.bugsite.controller;
+package com.bugsite.dto;
 
 public class ResponseDTO<T> {
     private Boolean success = true;

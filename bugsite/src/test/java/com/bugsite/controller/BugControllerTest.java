@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.bugsite.BugsiteApplication;
 import com.bugsite.dto.BugDTO;
+import com.bugsite.dto.ResponseDTO;
 
 
 @RunWith(SpringRunner.class)
