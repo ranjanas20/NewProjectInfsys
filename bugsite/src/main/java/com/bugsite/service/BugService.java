@@ -51,7 +51,6 @@ public class BugService {
     
     public BugEntity toBugEntity(BugDTO dto){
         BugEntity entity = new BugEntity();
-        entity.setBugId(dto.getBugId());
         entity.setDescription(dto.getDescription());
         entity.setTitle(dto.getTitle());
         entity.setStatusEntity(em.getReference(StatusEntity.class, dto.getStatusCode()));
@@ -69,6 +68,8 @@ public class BugService {
         dto.setTitle(entity.getTitle());
         dto.setImportanceCode(entity.getImportanceEntity().getImpCode());
         dto.setStatusCode(entity.getStatusEntity().getStatusCode());
+        dto.setStatusDescription(entity.getStatusEntity().getStatusDescription());
+        dto.setImportanceDescription(entity.getImportanceEntity().getImpDescription());
         dto.setUpdatedOn(toLocalDateTime(entity.getUpdatedOn()));
         dto.setCreatedOn(toLocalDateTime(entity.getCreatedOn()));
         dto.setUpdatedBy("admin");

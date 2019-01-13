@@ -11,7 +11,7 @@ INSERT INTO IMPORTANCE_MASTER (CODE, DESCRIPTION) VALUES ('HGH','High');
 INSERT INTO IMPORTANCE_MASTER (CODE, DESCRIPTION) VALUES ('CRT','Critical');
 
 --insert data into  BUG table
-INSERT INTO BUG (title,description,status_code,importance_code,created_on,created_by,updated_on,updated_by) VALUES  ('Functionality','error displayed while save','NEW','LOW',null,null,null,null);
-INSERT INTO BUG (title,description,status_code,importance_code,created_on,created_by,updated_on,updated_by) VALUES  ('Functionality','Status cannot have provided data','NEW','HGH',null,null,null,null);
-INSERT INTO BUG (title,description,status_code,importance_code,created_on,created_by,updated_on,updated_by) VALUES  ('Functionality','bug number format is not correct','CLR','MED',null,null,null,null);
+INSERT INTO BUG (title,description,status_code,importance_code) VALUES  ('Functionality','error displayed while save','NEW','LOW');
+INSERT INTO BUG (title,description,status_code,importance_code) VALUES  ('Functionality','Status cannot have provided data','NEW','HGH');
+INSERT INTO BUG (title,description,status_code,importance_code) VALUES  ('Functionality','bug number format is not correct','CLR','MED');
 

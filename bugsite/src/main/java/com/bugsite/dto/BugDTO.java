@@ -6,6 +6,10 @@ public class BugDTO extends AuditableDTO {
 	private String description;
 	private String statusCode;
 	private String importanceCode;
+	
+	private String statusDescription;
+	private String importanceDescription;
+	
 	public Long getBugId() {
 		return bugId;
 	}
@@ -35,5 +39,17 @@ public class BugDTO extends AuditableDTO {
 	}
 	public void setImportanceCode(String importanceCode) {
 		this.importanceCode = importanceCode;
+	}
+	public String getStatusDescription() {
+		return statusDescription;
+	}
+	public void setStatusDescription(String statusDescription) {
+		this.statusDescription = statusDescription;
+	}
+	public String getImportanceDescription() {
+		return importanceDescription;
+	}
+	public void setImportanceDescription(String importanceDescription) {
+		this.importanceDescription = importanceDescription;
 	}
 }
