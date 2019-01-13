@@ -50,7 +50,7 @@ public class BugServiceTest {
 	public void setUp() throws Exception {
 		
 		BugDTO bugDTO = new BugDTO();
-		bugDTO.setBugId(4L);
+		//bugDTO.setBugId(4L);
 		bugDTO.setTitle(title);
 		bugDTO.setDescription(description);
 		bugDTO.setStatusCode(statusCode);
@@ -77,7 +77,7 @@ public class BugServiceTest {
 	@Test
 	public void testAddBug() {
 		BugDTO bugDTO = new BugDTO();
-		bugDTO.setBugId(5L);
+		//bugDTO.setBugId(5L);
 		bugDTO.setTitle(title1);
 		bugDTO.setDescription(description1);
 		bugDTO.setStatusCode(statusCode1);

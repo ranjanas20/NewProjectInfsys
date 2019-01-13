@@ -8,32 +8,13 @@ import com.bugsite.entity.StatusEntity;
 
 import static com.bugsite.service.DataConvertUtil.*;
 
+import javax.persistence.EntityManager;
+
+
 public class BugDTOtoEntityMap {
+
 	
-    public static BugEntity toBugEntity(BugDTO dto){
-        BugEntity entity = new BugEntity();
-        entity.setBugId(dto.getBugId());
-        entity.setDescription(dto.getDescription());
-        entity.setTitle(dto.getTitle());
-        entity.setStatusEntity(new StatusEntity(dto.getStatusCode()));
-        entity.setImportanceEntity(new ImportanceEntity(dto.getImportanceCode()));
-        setAuditableNEW(entity);
-        return entity;        
-    }
     
-    public static BugDTO toBugDTO(BugEntity entity){
-    	BugDTO dto = new BugDTO();
-        dto.setBugId(entity.getBugId());
-        dto.setDescription(entity.getDescription());
-        dto.setTitle(entity.getTitle());
-        dto.setImportanceCode(entity.getImportanceEntity().getImpCode());
-        dto.setStatusCode(entity.getStatusEntity().getStatusCode());
-        dto.setUpdatedOn(toLocalDateTime(entity.getUpdatedOn()));
-        dto.setCreatedOn(toLocalDateTime(entity.getCreatedOn()));
-        dto.setUpdatedBy("admin");
-        dto.setCreatedBy("admin");
-        return dto;
-    }
     
     public static BugEntity updateBugEntity(BugEntity entity, BugDTO dto){
         entity.setBugId(dto.getBugId());

@@ -1,5 +1,6 @@
 package com.bugsite.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,11 +28,11 @@ public class BugEntity extends Auditable {
 	@Column(name = "description")
 	private String description;
 	
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="status_code", referencedColumnName="code")    
     private StatusEntity statusEntity;
 	
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="importance_code", referencedColumnName="code")    
     private ImportanceEntity importanceEntity;
 	
