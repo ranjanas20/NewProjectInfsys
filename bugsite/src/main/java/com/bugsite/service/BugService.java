@@ -11,9 +11,14 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.bugsite.dto.BugDTO;
+import com.bugsite.dto.SearchResponseDTO;
 import com.bugsite.entity.BugEntity;
 import com.bugsite.entity.ImportanceEntity;
 import com.bugsite.entity.StatusEntity;
@@ -34,15 +39,18 @@ public class BugService {
         return toBugDTO(savedEntity);
     }
 
+    public SearchResponseDTO<BugDTO> findAllBugsPageWise(Integer pageNo, Integer pageSize,  String sortField, String sortOrder) {
+    	SearchResponseDTO<BugDTO> dto = new SearchResponseDTO<BugDTO>();
+    	Pageable pageable = PageRequest.of(pageNo-1, pageSize, Sort.Direction.fromString(sortOrder), sortField);
+        Page<BugEntity> pages= bugRepository.findAll(pageable);
+        dto.setTotalPages(Math.round(((bugRepository.count()*1.0)/pageSize)+.5));
+        List<BugDTO> list = pages.getContent().stream().map(r-> { return toBugDTO(r);})
+                    .collect(Collectors.toList());
+        dto.setData(list);
+        return dto;
+    }
+    
     public List<BugDTO> findAllBugs() {
-    	/*Integer pageNo, Integer pageSize*/
-        /*Pageable page = PageRequest.of(pageNo, pageSize, Sort.Direction.ASC, "bugId");
-        Page<BugEntity> pages= bugRepository.findAll(page);
-        
-        return pages.getContent()
-        			.stream()
-        			.map(r-> { return toBugDTO(r);})
-        			.collect(Collectors.toList()); */
     	List<BugEntity> listOfBugs = bugRepository.findAll();
     	return listOfBugs.stream()
     			.map(r -> { return toBugDTO(r);})
@@ -56,7 +64,7 @@ public class BugService {
         entity.setStatusEntity(em.getReference(StatusEntity.class, dto.getStatusCode()));
         entity.setImportanceEntity(em.getReference(ImportanceEntity.class, dto.getImportanceCode()));
         setAuditableNEW(entity);
-        return entity;        
+        return entity;   
     }
     
 
