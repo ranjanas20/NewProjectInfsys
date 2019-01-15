@@ -2,7 +2,7 @@ package com.bugsite.dto;
 
 import java.util.List;
 
-public class SearchResponseDTO<T> {
+public class BugListResponseDTO<T> {
     private Boolean success = true;
     private String respCode = "";
     private String respMessage = "";

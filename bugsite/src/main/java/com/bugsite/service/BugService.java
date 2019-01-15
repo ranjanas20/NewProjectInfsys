@@ -2,6 +2,7 @@ package com.bugsite.service;
 
 import static com.bugsite.service.DataConvertUtil.setAuditableNEW;
 import static com.bugsite.service.DataConvertUtil.toLocalDateTime;
+import static com.bugsite.service.DataConvertUtil.setAuditableMODIFY;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.bugsite.dto.BugDTO;
-import com.bugsite.dto.SearchResponseDTO;
+import com.bugsite.dto.BugsCountDTO;
+import com.bugsite.dto.BugListResponseDTO;
 import com.bugsite.entity.BugEntity;
 import com.bugsite.entity.ImportanceEntity;
 import com.bugsite.entity.StatusEntity;
@@ -38,9 +40,17 @@ public class BugService {
         BugEntity savedEntity = bugRepository.save(toBugEntity(dto));
         return toBugDTO(savedEntity);
     }
+    
+    @Transactional
+    public BugDTO updateBug(BugDTO dto ) {
+    	BugEntity entity = bugRepository.getOne(dto.getBugId()) ;  
+    	setDTOToBugEntity(entity,dto);
+    	BugEntity savedEntity = bugRepository.save(entity);
+        return toBugDTO(savedEntity);
+    }
 
-    public SearchResponseDTO<BugDTO> findAllBugsPageWise(Integer pageNo, Integer pageSize,  String sortField, String sortOrder) {
-    	SearchResponseDTO<BugDTO> dto = new SearchResponseDTO<BugDTO>();
+    public BugListResponseDTO<BugDTO> findAllBugsPageWise(Integer pageNo, Integer pageSize,  String sortField, String sortOrder) {
+    	BugListResponseDTO<BugDTO> dto = new BugListResponseDTO<BugDTO>();
     	Pageable pageable = PageRequest.of(pageNo-1, pageSize, Sort.Direction.fromString(sortOrder), sortField);
         Page<BugEntity> pages= bugRepository.findAll(pageable);
         dto.setTotalPages(Math.round(((bugRepository.count()*1.0)/pageSize)+.5));
@@ -57,6 +67,20 @@ public class BugService {
     			.collect(Collectors.toList());
     }
     
+    public Long getBugsCount() {
+    	Long count = bugRepository.count();
+    	return count;
+    }
+    
+    public BugsCountDTO getAllBugsCount() {
+    	BugsCountDTO dto = new BugsCountDTO();
+    	dto.setOpenBugs(bugRepository.getOpenBugCount());
+    	dto.setNewBugs(bugRepository.getNewBugCount());
+    	dto.setHighBugs(bugRepository.getHighBugCount());
+    	dto.setCriticalBugs(bugRepository.getCriticalBugCount());
+    	return dto;
+    }
+    
     public BugEntity toBugEntity(BugDTO dto){
         BugEntity entity = new BugEntity();
         entity.setDescription(dto.getDescription());
@@ -66,8 +90,6 @@ public class BugService {
         setAuditableNEW(entity);
         return entity;   
     }
-    
-
     
     public static BugDTO toBugDTO(BugEntity entity){
     	BugDTO dto = new BugDTO();
@@ -83,6 +105,16 @@ public class BugService {
         dto.setUpdatedBy("admin");
         dto.setCreatedBy("admin");
         return dto;
+    }
+    
+    public void setDTOToBugEntity(BugEntity entity,BugDTO dto){
+        entity.setBugId(dto.getBugId());
+        entity.setDescription(dto.getDescription());
+        entity.setTitle(dto.getTitle());
+        entity.setStatusEntity(em.getReference(StatusEntity.class, dto.getStatusCode()));
+        entity.setImportanceEntity(em.getReference(ImportanceEntity.class, dto.getImportanceCode()));
+        
+        setAuditableMODIFY(entity);
     }
     
 }
