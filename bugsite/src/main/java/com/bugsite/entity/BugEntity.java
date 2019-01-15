@@ -28,11 +28,11 @@ public class BugEntity extends Auditable {
 	@Column(name = "description")
 	private String description;
 	
-	@OneToOne(cascade = {CascadeType.ALL})
+	@OneToOne
     @JoinColumn(name="status_code", referencedColumnName="code")    
     private StatusEntity statusEntity;
 	
-	@OneToOne(cascade = {CascadeType.ALL})
+	@OneToOne
     @JoinColumn(name="importance_code", referencedColumnName="code")    
     private ImportanceEntity importanceEntity;
 	

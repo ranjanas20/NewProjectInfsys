@@ -41,6 +41,12 @@ public class BugService {
         return toBugDTO(savedEntity);
     }
     
+    
+    public BugDTO getBugById(Long bugId ) {
+    	BugEntity entity = bugRepository.getOne(bugId) ;  
+        return toBugDTO(entity);
+    }
+    
     @Transactional
     public BugDTO updateBug(BugDTO dto ) {
     	BugEntity entity = bugRepository.getOne(dto.getBugId()) ;  
@@ -50,13 +56,18 @@ public class BugService {
     }
 
     public BugListResponseDTO<BugDTO> findAllBugsPageWise(Integer pageNo, Integer pageSize,  String sortField, String sortOrder) {
+    	Long pageCount= PageHelper.computePages(bugRepository.count(),pageSize);
+    	if(pageCount<pageNo) {
+    		pageNo=pageCount.intValue();
+    	}
     	BugListResponseDTO<BugDTO> dto = new BugListResponseDTO<BugDTO>();
     	Pageable pageable = PageRequest.of(pageNo-1, pageSize, Sort.Direction.fromString(sortOrder), sortField);
         Page<BugEntity> pages= bugRepository.findAll(pageable);
-        dto.setTotalPages(Math.round(((bugRepository.count()*1.0)/pageSize)+.5));
+        dto.setTotalPages(pageCount);
         List<BugDTO> list = pages.getContent().stream().map(r-> { return toBugDTO(r);})
                     .collect(Collectors.toList());
         dto.setData(list);
+        dto.setPageNumber(pageNo);
         return dto;
     }
     
@@ -116,5 +127,10 @@ public class BugService {
         
         setAuditableMODIFY(entity);
     }
+
+
+	public void deleteById(Long bugId) {
+		bugRepository.deleteById(bugId);
+	}
     
 }

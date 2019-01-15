@@ -1,9 +1,9 @@
 package com.bugsite.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,20 +47,30 @@ public class BugController {
            @RequestParam(required = false, defaultValue = "20", value="pageSize") Integer pageSize,
            @RequestParam(required = false, defaultValue = "bugId", value="sortField") String sortField,
            @RequestParam(required = false, defaultValue = "ASC", value="sortOrder") String sortOrder) {
-    	BugListResponseDTO<BugDTO> resp = new BugListResponseDTO<BugDTO>();
+    	BugListResponseDTO<BugDTO> resp;
         resp = bugService.findAllBugsPageWise(pageNo,pageSize,sortField,sortOrder);
         resp.setSuccess(true);
         resp.setRespCode("OK");
         resp.setRespMessage("ALL SET");
-        resp.setPageNumber(pageNo);
+        
         return resp;
     }
     
     
-    @GetMapping(value = "/bugs")
-    public ResponseDTO<List<BugDTO>>  getBugs() {
-        ResponseDTO<List<BugDTO>> resp = new ResponseDTO<List<BugDTO>>();
-        resp.setData( bugService.findAllBugs());
+    @GetMapping(value = "/bug/{bugId}")
+    public ResponseDTO<BugDTO>  getBugs( @PathVariable(value="bugId") Long bugId) {
+        ResponseDTO<BugDTO> resp = new ResponseDTO<BugDTO>();
+        resp.setData( bugService.getBugById(bugId));
+        resp.setSuccess(true);
+        resp.setRespCode("200");
+        resp.setRespMessage("SUCCESS");
+        return resp;
+    }
+    @DeleteMapping(value = "/bug/{bugId}")
+    public ResponseDTO<String>  deleteBug( @PathVariable(value="bugId") Long bugId) {
+    	bugService.deleteById(bugId);
+        ResponseDTO<String> resp = new ResponseDTO<String>();
+        resp.setData("");
         resp.setSuccess(true);
         resp.setRespCode("200");
         resp.setRespMessage("SUCCESS");
